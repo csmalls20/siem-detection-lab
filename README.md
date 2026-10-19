@@ -8,6 +8,8 @@ This lab demonstrates centralized security log collection, analysis, and threat 
 - [Lab Environment](#lab-environment)
 - [Lab Diagram](#lab-diagram)
 - [Wazuh Manager Installation](#wazuh-manager-installation)
+- [Wazuh Agent Installation](#wazuh-agent-installation)
+- [Testing]()
 
 ## Lab Environment
 
@@ -25,7 +27,7 @@ Each virtual machine was configured according to its role within the lab.
 
 | Virtual Machine | Memory | Processors | Storage | Network Mode |
 |---------|---------|---------|---------|---------|
-| Ubuntu Server 26.04 | 4 GB | 2 | 60 GiB | Shared Network & Host Only |
+| Ubuntu Server 24.04 | 8 GB | 2 | 60 GiB | Shared Network & Host Only |
 | Windows 11 | 4 GB | 2 | 64 GiB | Shared Network & Host Only |
 | Kali Linux | 4 GB | 2 | 40 GiB | Host Only |
 
@@ -33,7 +35,56 @@ Ubuntu Server and Windows 11 were configured with Shared Network (NAT) and Host 
 
 ## Lab Diagram
 
+Ubuntu Server (192.168.24.10)
+Windows 11 (192.168.24.20)
+Kali Linux (192.168.24.30)
 Picture of lab architecture
 
---
+---
+
 ## Wazuh Manager Installation
+**Note:** Upon installing Ubuntu Server 24.04, the default interface was command-line based. Although not a requirement, the following commands were executed to install a graphical desktop environment and update the system packages:
+```
+sudo apt update && sudo apt upgrade -y
+sudo apt install ubuntu-desktop -y
+sudo reboot
+```
+
+After installing the Ubuntu desktop environment, the Wazuh Manager, Dashboard, and Indexer were installed using the Wazuh installation script downloaded with `curl`.
+```
+curl -sO https://packages.wazuh.com/4.14/wazuh-install.sh
+sudo bash ./wazuh-install.sh -a
+```
+
+Upon successful installation, the Wazuh installation script provided the credentials required to access the Wazuh Dashboard. The Dashboard was accessed by navigating to the URL below in a web browser and entering the provided username and password.
+
+```
+https://<192.168.24.10>
+```
+
+![Wazuh Dashboard login](screenshots/01-dashboard-login.png)
+
+## Wazuh Agent Installation
+
+After accessing the Wazuh Dashboard, **Deploy new agent** was selected to configure the Windows 11 agent with the following settings:
+- Operating system: `Windows`
+- Server address: `192.168.24.10`
+- Agent name: `wazuh-agent`
+
+![Wazuh Dashboard](screenshots/02-wazuh-dashboard.png)
+![Agent information](screenshots/03-agent-information.png)
+
+Following this configuration, the Wazuh Dashboard generated an agent installation command. The command was copied and executed in Windows PowerShell on the Windows 11 virtual machine to install the Wazuh agent.
+
+```
+Invoke-WebRequest -Uri https://packages.wazuh.com/4.x/windows/wazuh-agent-4.14.9-1.msi -OutFile $env:tmp\wazuh-agent; msiexec.exe /i $env:tmp\wazuh-agent /q WAZUH_MANAGER='192.168.24.10' WAZUH_AGENT_NAME='wazuh-agent' 
+```
+
+After installing the Wazuh agent, the service was started using the following command in Windows PowerShell. The agent's status was then verified in the Wazuh Dashboard.
+
+```
+NET START Wazuh
+```
+
+![Start agent command](screenshots/04-start-agent.png)
+![Agent verification](screenshots/05-agent-verification.png)
