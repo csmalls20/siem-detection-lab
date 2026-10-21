@@ -104,10 +104,10 @@ NET START Wazuh
 
 ## Sysmon Installation (Optional)
 
-As an optional enhancement, **Sysmon** (System Monitor) was installed on the Windows 11 endpoint to capture additional system activity and enhance security monitoring.
+As an optional enhancement, **Sysmon (System Monitor)** was installed on the Windows 11 endpoint to capture additional system activity and enhance security monitoring.
 
 For detailed installation and configuration instructions, see
-[Sysmon Installation](docs/sysmon-installation.md).
+[Sysmon Installation and Configuration](docs/sysmon-installation.md).
 
 ---
 
