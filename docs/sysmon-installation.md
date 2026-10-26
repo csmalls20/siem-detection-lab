@@ -66,22 +66,53 @@ By opening **Windows Event Viewer** and navigating to **Application and Services
 
 ![Windows Event Viewer log](/screenshots/sysmon-config/08-event-viewer-log.png)
 
-To determine whether the absence of Notepad-related events was due to the application activity not being captured by default, the **ossec.conf** file was temporarily modified on the Ubuntu VM. After opening **Terminal**, the following was executed to open the manager configuration:
+To determine whether the absence of Notepad-related events was due to the application activity not being captured by default, the **ossec.conf** and **filebeat.yml** files were temporarily modified on the Ubuntu VM. After opening terminal, the following was executed to open the manager configuration:
 
 ```
 sudo nano /var/ossec/etc/ossec.conf
 ```
 
-Within the **ossec.conf** file, the <logall_json> setting was changed from "no" to "yes" to enable JSON archival of events:
+Within the **ossec.conf** file, the logall_json setting was changed from no to yes to enable JSON event archiving:
 
 ```
 <logall_json>yes</logall_json>
 ```
-![JSON log all configuration](/screenshots/sysmon-config/09-log-all.png)
+![JSON log all configuration](/screenshots/sysmon-config/09-log-all-json.png)
 
-The manager was then restarted for the changes to go into effect.
+The manager was then restarted to apply the changes.
 
 ```
 sudo systemctl restart wazuh-manager
 ```
 
+Next, the Filebeat configuration was modified to forward archived events to the Wazuh indexer. In the Ubuntu Server terminal, the following command was executed to open the configuration file:
+
+```
+sudo nano /etc/filebeat/filebeat.yml
+```
+
+Within the filebeat.modules section, the archives setting was changed from false to true, enabling Filebeat to forward archived events:
+
+```
+archives:
+  enabled: true
+```
+![Filebeat configuration](/screenshots/sysmon-config/10-filebeat-enable.png)
+
+
+After saving the configuration, Filebeat was restarted to apply the changes:
+
+```
+sudo systemctl restart filebeat
+```
+
+With log archiving enabled, an index pattern was created in the Wazuh Dashboard to access archived events. The index pattern **wazuh-archives*** was configured with **timestamp** as the time field by navigating to **Dashboards Management → Index patterns → Create index pattern**.
+
+![Index pattern name](/screenshots/sysmon-config/11-index-pattern.png)
+![Index time field](/screenshots/sysmon-config/12-index-time-field.png)
+
+Returning to the Windows 11 endpoint, Notepad was closed and reopened to check whether Sysmon events were being forwarded to the Wazuh Manager. After reproducing the activity and checking the Wazuh Dashboard on the Ubuntu Server, the expected results appeared.
+
+![Dashboard log verification](/screenshots/sysmon-config/13-log-verification.png)
+
+After confirming that the events were being captured and forwarded successfully, the **wazuh-archives*** index pattern was deleted, and the configuration files were restored to their original values.
