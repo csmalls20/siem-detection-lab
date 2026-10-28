@@ -1,5 +1,7 @@
 # SIEM Detection Lab
 
+## Project Overview
+
 This lab demonstrates centralized security log collection, analysis, and threat detection using Wazuh within an isolated virtual network environment designed to simulate a small-scale Security Operations Center (SOC). It illustrates how security events are collected from endpoints, analyzed by the SIEM, and investigated to identify potentially suspicious activity.
 
 
@@ -10,7 +12,7 @@ This lab demonstrates centralized security log collection, analysis, and threat 
 - [Wazuh Manager Installation](#wazuh-manager-installation)
 - [Wazuh Agent Installation](#wazuh-agent-installation)
 - [Sysmon Installation (Optional)](#sysmon-installation)
-- [Testing](#testing)
+- [Detection Testing](#detection-testing)
 
 ---
 
@@ -23,8 +25,6 @@ This lab demonstrates centralized security log collection, analysis, and threat 
 | Windows 11 | Wazuh Agent |
 | Kali Linux | Attacker Machine |
 | Wazuh | SIEM Platform |
-
----
 
 ### VM Configuration
 
@@ -111,4 +111,21 @@ For detailed installation and configuration instructions, see
 
 ---
 
-## Testing
+## Detection Testing
+
+The lab was tested by simulating security-related activities on the Windows 11 endpoint and verifying whether the resulting events were collected and analyzed by Wazuh. The following scenarios were selected to evaluate the SIEM's event monitoring and threat detection capabilities.
+
+
+| Test Scenario | Objective
+|------|---------|
+| User Account Creation | Verify monitoring of newly created Windows user accounts. |
+| Failed Login Attempts | Identify unsuccessful authentication attempts. |
+| File Integrity Monitoring | Detect changes to monitored files and directories. |
+| Suspicious PowerShell Execution | Identify potentially suspicious command execution on the Windows endpoint. |
+| Network Reconnaissance | Investigate network scanning activity originating from the Kali Linux VM. |
+| SSH Brute Force | Detect repeated unsuccessful SSH authentication attempts against a Linux host. |
+
+For detailed testing procedures, configuration, screenshots, and results, see [Detection Testing](docs/detection-testing.md).
+
+
+ADD lines to separate

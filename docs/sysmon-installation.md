@@ -1,5 +1,7 @@
 # Sysmon Installation and Configuration
 
+## Overview
+
 This document describes the process of installing and configuring Sysmon to collect detailed system activity logs for security monitoring and investigation. 
 
 ## 1. Sysmon Download
@@ -15,7 +17,7 @@ After downloading and extracting the Sysmon package, a configuration file was ob
 
 ![SwiftOnSecurity GitHub](/screenshots/sysmon-config/02-sysmonconfig-github.png)
 
-## 3. Sysmon Installation via Windows Powershell
+## 3. Sysmon Installation via Windows PowerShell
 
 Following this, the configuration file was moved to the extracted Sysmon directory in preparation for applying the configuration through **Windows PowerShell**.
 
