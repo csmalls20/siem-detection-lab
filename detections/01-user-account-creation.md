@@ -16,11 +16,11 @@ net user jane password /add
 
 The Windows Security log was examined in Event Viewer to verify that the account creation was recorded. The activity was logged as **Event ID 4720**, which indicates that a user account was created in Windows.
 
-![Event Viewer user creation log](/screenshots/user-account-creation/01-windows-event-viewer.png)
+![Event Viewer user creation log](../screenshots/user-account-creation/01-windows-event-viewer.png)
 
 Using this Event ID, the Wazuh Dashboard was then examined to determine whether the event was collected.
 
-![Wazuh Dashboard user creation log](/screenshots/user-account-creation/02-wazuh-dashboard.png)
+![Wazuh Dashboard user creation log](../screenshots/user-account-creation/02-wazuh-dashboard.png)
 
 ## Detection Results
 

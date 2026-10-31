@@ -9,39 +9,39 @@ This document describes the process of installing and configuring Sysmon to coll
 The official Sysmon package was downloaded from the
 [Microsoft Sysinternals website](https://learn.microsoft.com/en-us/sysinternals/downloads/sysmon).
 
-![Sysmon webpage](/screenshots/sysmon-config/01-sysmon-webpage.png)
+![Sysmon webpage](../screenshots/sysmon-config/01-sysmon-webpage.png)
 
 
 ## 2. Sysmon Configuration File Download
 After downloading and extracting the Sysmon package, a configuration file was obtained to define which events Sysmon should monitor and log. The configuration template was downloaded from [SwiftOnSecurity's GitHub repository](https://github.com/SwiftOnSecurity/sysmon-config/blob/master/sysmonconfig-export.xml).
 
-![SwiftOnSecurity GitHub](/screenshots/sysmon-config/02-sysmonconfig-github.png)
+![SwiftOnSecurity GitHub](../screenshots/sysmon-config/02-sysmonconfig-github.png)
 
 ## 3. Sysmon Installation via Windows PowerShell
 
 Following this, the configuration file was moved to the extracted Sysmon directory in preparation for applying the configuration through **Windows PowerShell**.
 
-![Configuration file directory](/screenshots/sysmon-config/03-sysmonconfig-move.png)
+![Configuration file directory](../screenshots/sysmon-config/03-sysmonconfig-move.png)
 
 Windows PowerShell was opened as an administrator, and the directory containing the Sysmon executable was accessed. The following command was executed to install Sysmon and apply the downloaded configuration file. The license agreement was also accepted during the installation process.
 
 ```
 .\Sysmon64а.exe -i sysmonconfig-export.xml
 ```
-![Sysmon installation command](/screenshots/sysmon-config/04-sysmon-installation-command.png)
+![Sysmon installation command](../screenshots/sysmon-config/04-sysmon-installation-command.png)
 ***Note:** `Sysmon64a.exe` was selected because the Windows 11 virtual machine runs on an ARM64 architecture, consistent with the Apple Silicon host (MacBook Pro M1). Using the version that matches the guest operating system's architecture helps ensure compatibility.*
 
 ## 4. Verify Installation
 
 The Windows **Services** console was then opened, and the `Sysmon64a` service was located to verify that it was running, indicating that Sysmon had been installed successfully.
 
-![Services window](/screenshots/sysmon-config/05-verify-sysmon.png)
+![Services window](../screenshots/sysmon-config/05-verify-sysmon.png)
 
 ## 5. Configure Wazuh to Collect Sysmon Events
 
 Although Sysmon was installed, the Wazuh agent also needed to be configured to collect Sysmon events. This was accomplished by modifying the **ossec.conf** configuration file. Notepad was opened with administrator privileges, and the file was located by navigating to **This PC → Local Disk (C:) → Program Files (x86) → ossec-agent → ossec.conf**.
 
-![ossec.conf file in Notepad](/screenshots/sysmon-config/06-ossec-config-file.png)
+![ossec.conf file in Notepad](../screenshots/sysmon-config/06-ossec-config-file.png)
 *By default, the Open dialog filters the displayed files by text documents. The **All Files** option was selected to display the ossec.conf configuration file.*
 
 Under the "log analysis" section of **ossec.conf**, the following was added to enable the Wazuh agent to collect Sysmon events:
@@ -52,7 +52,7 @@ Under the "log analysis" section of **ossec.conf**, the following was added to e
     <log_format>eventchannel</log_format>
 </localfile>
 ```
-![ossec.conf modification](/screenshots/sysmon-config/07-sysmon-config-code.png)
+![ossec.conf modification](../screenshots/sysmon-config/07-sysmon-config-code.png)
 
 After saving the configuration file, the Wazuh agent service was restarted in an administrator PowerShell session to apply the changes.
 
@@ -66,7 +66,7 @@ To verify the Sysmon configuration, a test was performed to confirm that events 
 
 By opening **Windows Event Viewer** and navigating to **Application and Services Logs → Microsoft → Windows → Sysmon → Operational**, it was confirmed that events were being recorded locally.
 
-![Windows Event Viewer log](/screenshots/sysmon-config/08-event-viewer-log.png)
+![Windows Event Viewer log](../screenshots/sysmon-config/08-event-viewer-log.png)
 
 To determine whether the absence of Notepad-related events was due to the application activity not being captured by default, the **ossec.conf** and **filebeat.yml** files were temporarily modified on the Ubuntu VM. After opening terminal, the following was executed to open the manager configuration:
 
@@ -79,7 +79,7 @@ Within the **ossec.conf** file, the logall_json setting was changed from no to y
 ```
 <logall_json>yes</logall_json>
 ```
-![JSON log all configuration](/screenshots/sysmon-config/09-log-all-json.png)
+![JSON log all configuration](../screenshots/sysmon-config/09-log-all-json.png)
 
 The manager was then restarted to apply the changes.
 
@@ -99,7 +99,7 @@ Within the filebeat.modules section, the archives setting was changed from false
 archives:
   enabled: true
 ```
-![Filebeat configuration](/screenshots/sysmon-config/10-filebeat-enable.png)
+![Filebeat configuration](../screenshots/sysmon-config/10-filebeat-enable.png)
 
 
 After saving the configuration, Filebeat was restarted to apply the changes:
@@ -110,11 +110,11 @@ sudo systemctl restart filebeat
 
 With log archiving enabled, an index pattern was created in the Wazuh Dashboard to access archived events. The index pattern **wazuh-archives*** was configured with **timestamp** as the time field by navigating to **Dashboards Management → Index patterns → Create index pattern**.
 
-![Index pattern name](/screenshots/sysmon-config/11-index-pattern.png)
-![Index time field](/screenshots/sysmon-config/12-index-time-field.png)
+![Index pattern name](../screenshots/sysmon-config/11-index-pattern.png)
+![Index time field](../screenshots/sysmon-config/12-index-time-field.png)
 
 Returning to the Windows 11 endpoint, Notepad was closed and reopened to check whether Sysmon events were being forwarded to the Wazuh Manager. After reproducing the activity and checking the Wazuh Dashboard on the Ubuntu Server, the expected results appeared.
 
-![Dashboard log verification](/screenshots/sysmon-config/13-log-verification.png)
+![Dashboard log verification](../screenshots/sysmon-config/13-log-verification.png)
 
-After confirming that the events were being captured and forwarded successfully, the **wazuh-archives*** index pattern was deleted, and the configuration files were restored to their original values.
+After confirming that the events were being captured and forwarded successfully, the **wazuh-archives*** index pattern was deleted, and the configuration files were restored to their original values. These changes are optional and may be retained depending on the desired lab configuration.

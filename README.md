@@ -125,7 +125,7 @@ The lab was tested by simulating security-related activities on the Windows 11 e
 | Network Reconnaissance | Investigate network scanning activity originating from the Kali Linux VM. |
 | SSH Brute Force | Detect repeated unsuccessful SSH authentication attempts against a Linux host. |
 
-For detailed testing procedures, configuration, screenshots, and results, see [Detection Testing](docs/detection-testing.md).
+For detailed testing procedures, configuration, screenshots, and results, see [Detection Testing](detections/README.md).
 
 
 ADD lines to separate

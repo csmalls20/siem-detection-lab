@@ -4,7 +4,7 @@
 
 This document outlines the security testing performed in the SIEM detection lab. Each test simulates a security-related activity to evaluate whether the resulting events are collected, analyzed, and, potentially flagged by Wazuh. 
 
-Testing is primarily conducted on the Windows 11 endpoint, with selected activities originating from the Kali Linux machine. The Wazuh Dashboard is used to evaluate detection results by verifying event collection and reviewing generated alerts
+Testing is primarily conducted on the Windows 11 endpoint, with selected activities originating from the Kali Linux machine. The Wazuh Dashboard is used to evaluate detection results by verifying event collection and reviewing generated alerts.
 
 ## Detection List
 
