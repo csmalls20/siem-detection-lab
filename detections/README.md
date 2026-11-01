@@ -10,4 +10,6 @@ Testing is primarily conducted on the Windows 11 endpoint, with selected activit
 
 1. [User Account Creation](01-user-account-creation.md) - Monitors Windows user account creation events.
 2. [Failed Logins](02-failed-logins.md) - Tests detection of repeated unsuccessful Windows authentication attempts.
-3. [File Integrity Monitoring](03-file-integrity-monitoring.md) — Tests whether changes to monitored files generate alerts.
+3. [File Integrity Monitoring](03-file-integrity-monitoring.md) - Tests whether changes to monitored files generate alerts.
+4. [Suspicious PowerShell Execution](04-suspicious-powershell-execution) - Detect suspicious command execution in Windows PowerShell.
+5. [Network Reconnaissance](05-network-reconnaissance.md) - 
