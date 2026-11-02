@@ -24,13 +24,12 @@ Under **Server management → Rules → Custom rules**, **local_rules.xml** was 
 The following rule was added to detect repeated failed logon events:
 
 ```
-<group name="windows,authentication,">
+  <!-- Windows authentication rules -->
   <rule id="100100" level="10" frequency="5" timeframe="120">
     <if_matched_sid>60122</if_matched_sid>
     <description>Multiple failed Windows logons detected within 2 minutes - possible brute-force activity.</description>
-    <group>authentication_failed,brute_force,</group>
+    <group>windows,authentication,authentication_failed,brute_force,</group>
   </rule>
-</group>
 ```
 
 ![Custom rules configuration](../screenshots/failed-login-attempts/03-local-rules.png)
