@@ -80,10 +80,22 @@ Using the Wazuh Dashboard, alerts were filtered by rule ID 100201 to identify ev
 
 ## Detection Results
 
-Wazuh successfully collected the network activity logs and generated an alert using custom rule ID 100201 following execution of the Nmap scan. Thus, confirming the detection rule identified network reconnaissance activity originating from the Kali Linux machine.
+Wazuh successfully collected the network activity logs and generated an alert using custom rule ID 100201 following execution of the Nmap scan. This confirmed that the detection rule successfully identified network reconnaissance activity originating from the Kali Linux machine
 
 ## MITRE ATT&CK Mapping
 
 - **Tactic:** Discovery
 - **Technique:** Network Service Discovery
 - **Technique ID:** T1046
+
+## Restore Default Audit Configuration
+
+After completing the network reconnaissance test, the Windows Filtering Platform audit settings were reverted to their original configuration to reduce the volume of logs generated and forwarded for analysis within the simulated environment.
+
+The following commands were executed in an administrative PowerShell session:
+
+```
+auditpol /set /subcategory:"Filtering Platform Connection" /success:disable /failure:disable
+
+auditpol /set /subcategory:"Filtering Platform Packet Drop" /success:disable /failure:disable
+```
