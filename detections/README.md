@@ -12,4 +12,5 @@ Testing is primarily conducted on the Windows 11 endpoint, with selected activit
 2. [Failed Logins](02-failed-logins.md) - Tests detection of repeated unsuccessful Windows authentication attempts.
 3. [File Integrity Monitoring](03-file-integrity-monitoring.md) - Tests whether changes to monitored files generate alerts.
 4. [Suspicious PowerShell Execution](04-suspicious-powershell-execution) - Detects potentially suspicious command execution using PowerShell.
-5. [Network Reconnaissance](05-network-reconnaissance.md) - Identifies network scanning activity against the Windows 11 endpoint. 
+5. [Network Reconnaissance](05-network-reconnaissance.md) - Identifies network scanning activity against the Windows 11 endpoint.
+6. [SMB Enumeration](06-smb-enumeration.md) - 
