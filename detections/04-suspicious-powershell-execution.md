@@ -4,6 +4,8 @@
 
 To evaluate whether Wazuh can detect and generate alerts for potentially suspicious PowerShell command execution on the Windows 11 endpoint.
 
+---
+
 ## Configuration
 
 Before testing whether PowerShell executions were being recorded by Wazuh, Windows PowerShell logging had to be enabled to ensure the activity was captured.
@@ -31,6 +33,8 @@ The agent was then restarted in an administrative Windows PowerShell session for
 Restart-Service -Name wazuh
 ```
 
+---
+
 ## Test Procedure
 
 A PowerShell session was opened with administrator privileges, and a new registry value was created using the following command:
@@ -40,24 +44,31 @@ New-ItemProperty -Path "HKCU:\Software" -Name "WazuhTest" -Value "DetectionTest"
 ```
 ![Registry creation command](../screenshots/suspicious-powershell-execution/03-registry-creation.png)
 
+---
+
 ## Event Investigation
 
 Within the **Threat Hunting** section of the Wazuh Dashboard, the collected events were reviewed to determine whether the registry modification activity generated an alert
 
 ![Registry modification log](../screenshots/suspicious-powershell-execution/04-registry-creation-event-log.png)
 
-After verifying the generated alert, the test registry value was removed using the following command: 
+After verifying the generated alert, the test registry value was removed from the Windows endpoint using the following command: 
 
 ```
 Remove-ItemProperty -Path "HKCU:\Software" -Name "WazuhTest"
 ```
 
+---
+
 ## Detection Results
 
 Wazuh successfully generated an alert with **Rule ID 91843**, identifying the PowerShell activity associated with the registry modification. This confirmed that the activity was detected and recorded.
 
+---
+
 ## MITRE ATT&CK Mapping
 
-- **Tactic:** Defense Evasion, Execution
-- **Technique:** Modify Registry, Command and Scripting Interpreter: PowerShell
-- **Technique ID:** T1112, T1059.001
+| Tactic | Technique | Technique ID |
+|---|---|---|
+| Defense Evasion | Modify Registry | T1112 |
+| Execution | Command and Scripting Interpreter: PowerShell | T1059.001 |

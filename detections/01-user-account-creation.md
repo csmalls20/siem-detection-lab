@@ -4,6 +4,8 @@
 
 To verify that the creation of a local user account on the monitored Windows 11 endpoint is recorded and can be investigated through Wazuh.
 
+---
+
 ## Test Procedure
 
 Using the default Windows user account with administrative privileges, a new local user account was created by executing the following command in **Command Prompt**.
@@ -11,6 +13,8 @@ Using the default Windows user account with administrative privileges, a new loc
 ```
 net user jane password /add
 ```
+
+---
 
 ## Event Investigation
 
@@ -22,9 +26,13 @@ Using this Event ID, the Wazuh Dashboard was then examined to determine whether 
 
 ![Wazuh Dashboard user creation log](../screenshots/user-account-creation/02-wazuh-dashboard.png)
 
+---
+
 ## Detection Results
 
 Wazuh successfully collected the account creation event and generated a corresponding alert. This confirmed that the activity was visible in the SIEM and identified by the configured detection rules.
+
+---
 
 ## MITRE ATT&CK Mapping
 

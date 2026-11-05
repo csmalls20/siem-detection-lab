@@ -8,11 +8,13 @@ This lab demonstrates centralized security log collection, analysis, and threat 
 ## Table of Contents
 
 - [Lab Environment](#lab-environment)
-- [Lab Diagram](#lab-diagram)
+- [Lab Architecture](#lab-architecture)
 - [Wazuh Manager Installation](#wazuh-manager-installation)
 - [Wazuh Agent Installation](#wazuh-agent-installation)
 - [Sysmon Installation (Optional)](#sysmon-installation)
 - [Detection Testing](#detection-testing)
+- [Key Findings](#key-findings)
+- [Future Improvements](#future-improvements)
 
 ---
 
@@ -36,17 +38,40 @@ Each virtual machine was configured according to its role within the lab.
 | Windows 11 | 4 GB | 2 | 64 GiB | Shared Network & Host Only |
 | Kali Linux | 4 GB | 2 | 40 GiB | Host Only |
 
-Ubuntu Server and Windows 11 were configured with Shared Network (NAT) and Host Only adapters to provide internet access while maintaining an isolated network for communication between the virtual machines. Kali Linux was set up to use the Host Only network for controlled testing against the other machines.
+Ubuntu Server and Windows 11 were configured with Shared Network (NAT) and Host Only adapters to provide internet access while maintaining an isolated network for communication between the virtual machines. Kali Linux was set up to use the Host Only network for controlled testing against the Windows 11 endpoint.
 
 ---
 
-## Lab Diagram
-
-Ubuntu Server (192.168.24.10)
-Windows 11 (192.168.24.20)
-Kali Linux (192.168.24.30)
-Picture of lab architecture
-
+## Lab Architecture
+```
+┌─────────────────────────┐
+│       Kali Linux        │
+│     Attacker Machine    │
+│     192.168.24.30       │
+└────────────┬────────────┘
+             │
+             │ Attack Simulation
+             │ Nmap, SMB Enumeration
+             │
+             ▼
+┌─────────────────────────┐
+│       Windows 11        │
+│       Wazuh Agent       │
+│     192.168.24.20       │
+└────────────┬────────────┘
+             │
+             │ Security Event Collection
+             │ Log Forwarding (TCP 1514)
+             │
+             ▼
+┌─────────────────────────┐
+│      Ubuntu Server      │
+│      Wazuh Manager      │
+│      Wazuh Dashboard    │
+│      Wazuh Indexer      │
+│      192.168.24.10      │
+└─────────────────────────┘
+```
 ---
 
 ## Wazuh Manager Installation
@@ -118,14 +143,32 @@ The lab was tested by simulating security-related activities on the Windows 11 e
 
 | Test Scenario | Objective
 |------|---------|
-| User Account Creation | Verify monitoring of newly created Windows user accounts. |
-| Failed Login Attempts | Identify unsuccessful authentication attempts. |
-| File Integrity Monitoring | Detect changes to monitored files and directories. |
-| Suspicious PowerShell Execution | Identify potentially suspicious command execution on the Windows endpoint. |
-| Network Reconnaissance | Investigate network scanning activity originating from the Kali Linux VM. |
-| SSH Brute Force | Detect repeated unsuccessful SSH authentication attempts against a Linux host. |
+| User Account Creation | Verify monitoring of newly created Windows user accounts |
+| Failed Login Attempts | Identify unsuccessful authentication attempts |
+| File Integrity Monitoring | Detect changes to monitored files and directories |
+| Suspicious PowerShell Execution | Identify potentially suspicious command execution on the Windows endpoint |
+| Network Reconnaissance | Investigate network scanning activity originating from the Kali Linux VM |
+| SMB Enumeration | Detect attempts to discover available network shares and access shared resources on the Windows endpoint |
 
 For detailed testing procedures, configuration, screenshots, and results, see [Detection Testing](detections/README.md).
 
+---
 
-ADD lines to separate
+## Key Findings
+
+The lab successfully demonstrated centralized security event collection and investigation using Wazuh. The detection scenarios validated the platform's ability to identify and generate alerts for various security events, including:
+
+- **Account Monitoring:** Detection of newly created accounts
+- **Authentication Monitoring:** Identification of repeated failed login attempts
+- **File Integrity Monitoring:** Detection of modifications to monitored files and directories
+- **Process Monitoring:** Identification of potentially suspicious PowerShell command executions
+- **Network Monitoring:** Investigation of network scanning and SMB share enumeration originating from Kali Linux
+
+---
+
+## Future Improvements
+
+- Expand monitoring to additional endpoints
+- Implement additional custom detection rules
+- Implement automated responses to simulated attacks
+- Improve alert correlation and investigation capability

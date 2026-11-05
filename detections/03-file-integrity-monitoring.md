@@ -4,6 +4,8 @@
 
 To verify whether modifications to files within a monitored directory are detected and logged by Wazuh for security monitoring and investigation.
 
+---
+
 ## Configuration
 
 Prior to performing the detection scenario, a test directory named **Confidential Data** was created on the Windows 11 endpoint under **Local Disk (C:)**.
@@ -30,11 +32,15 @@ After saving the configuration file, the Wazuh agent service was restarted to ap
 Restart-Service -Name wazuh
 ```
 
+---
+
 ## Test Procedure
 
 A text document named **Credit Card Info.txt** was created in the **Confidential Data** directory.
 
 ![New file created in directory](../screenshots/file-integrity-monitoring/03-file-creation.png)
+
+---
 
 ## Event Investigation
 
@@ -42,9 +48,13 @@ Under **Endpoint Security → File Integrity Monitoring**, the Wazuh Dashboard w
 
 ![Wazuh Dashboard FIM](../screenshots/file-integrity-monitoring/04-fim-dashboard.png)
 
+---
+
 ## Detection Results
 
 Wazuh successfully generated an alert indicating a new file was created within the monitored directory. 
+
+---
 
 ## MITRE ATT&CK Mapping
 
