@@ -22,10 +22,10 @@ This lab demonstrates centralized security log collection, analysis, and threat 
 
 | Component | Role
 |------|---------|
-| UTM | Virtualization Platform |
-| Ubuntu Server 26.04 | Wazuh Manager |
-| Windows 11 | Wazuh Agent |
-| Kali Linux | Attacker Machine |
+| [UTM](https://getutm.app/) | Virtualization Platform |
+| [Ubuntu Server 26.04](https://ubuntu.com/download/server/arm) | Wazuh Manager |
+| [Windows 11](https://www.microsoft.com/en-us/software-download/windows11arm64) | Wazuh Agent |
+| [Kali Linux](https://www.kali.org/get-kali/#kali-installer-images) | Attacker Machine |
 | Wazuh | SIEM Platform |
 
 ### VM Configuration
